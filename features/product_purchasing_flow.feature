@@ -7,12 +7,10 @@ Feature: End-to-end Product Purchasing Flow
         | Wireless Headphones  | 1        |
         | Fitness Band         | 1        |
         | Laptop Backpack      | 1        |
-        # And I add "Fitness Band" to the cart
-        # And I add "Laptop Backpack" to the cart
         And I view the cart
         Then the cart should contain
         | Product Name         | Quantity | Price |
         | Wireless Headphones  | 1        | $120  |
         | Fitness Band         | 1        | $60   |
         | Laptop Backpack      | 1        | $100  |
-        # And total price should be <total_price>
+        And total price should be "$280"

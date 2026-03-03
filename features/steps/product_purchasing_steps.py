@@ -20,7 +20,6 @@ def I_add_products_to_cart(context):
 @when('I view the cart')
 def I_view_the_cart(context):
     context.page.click_view_cart()
-    
 
 @then('the cart should contain')
 def the_cart_should_contain(context):
@@ -31,12 +30,22 @@ def the_cart_should_contain(context):
     for item in expected_items_list:
         assert item in actual_items_list, f"Expected item '{item}' not found in cart"
 
-@given('I am on the Challenges page')
-def I_am_on_the_challenges_page(context):
-    context.page = StartPage(context.driver).open()
-    context.page = context.page.click_option_button("Challenges")
+@then('total price should be "{expected_total_price}"')
+def total_price_should_be(context, expected_total_price):
+    actual_total_price = context.page.get_total_price()
+    assert actual_total_price == expected_total_price, f"Expected total price '{expected_total_price}', but got '{actual_total_price}'"
 
-@then('I should see the heading "{expected_heading}"')
-def I_should_see_the_heading(context, expected_heading):
-    actual_heading = context.page.get_heading_text()
-    assert actual_heading == expected_heading, f"Expected heading '{expected_heading}', but got '{actual_heading}'"
+
+
+
+
+
+# @given('I am on the Challenges page')
+# def I_am_on_the_challenges_page(context):
+#     context.page = StartPage(context.driver).open()
+#     context.page = context.page.click_option_button("Challenges")
+
+# @then('I should see the heading "{expected_heading}"')
+# def I_should_see_the_heading(context, expected_heading):
+#     actual_heading = context.page.get_heading_text()
+#     assert actual_heading == expected_heading, f"Expected heading '{expected_heading}', but got '{actual_heading}'"
