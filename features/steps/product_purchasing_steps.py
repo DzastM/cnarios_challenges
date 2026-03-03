@@ -10,19 +10,24 @@ def I_am_on_the_homepage(context):
 def I_am_on_the_product_purchasing_page(context):
     context.page = ProductPurchasingPage(context.driver).open()
 
-@when('I add "{product_name}" to the cart')
-def I_add_product_to_cart(context, product_name):
-    context.page.add_product_to_cart(product_name)
+@when('I add products to the cart')
+def I_add_products_to_cart(context):
+    for row in context.table:
+        product_name = row['Product Name']
+        quantity = int(row['Quantity'])
+        context.page.add_product_to_cart(product_name)
 
 @when('I view the cart')
 def I_view_the_cart(context):
     context.page.click_view_cart()
-    context.cart_items = context.page.get_cart_items()
+    
 
-@then('the cart should contain "{expected_items}"')
-def the_cart_should_contain(context, expected_items):
-    expected_items_list = expected_items.split(", ")
-    actual_items_list = [f"{quantity} x {name}" for name, quantity in context.cart_items.items()]
+@then('the cart should contain')
+def the_cart_should_contain(context):
+    expected_items_list = {}
+    for row in context.table:
+        expected_items_list[row['Product Name']] = int(row['Quantity'])
+    actual_items_list = context.page.get_item_name_and_quantity()
     for item in expected_items_list:
         assert item in actual_items_list, f"Expected item '{item}' not found in cart"
 
