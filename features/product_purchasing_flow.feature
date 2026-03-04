@@ -88,4 +88,4 @@ Feature: End-to-end Product Purchasing Flow
         And I click "Pay Now" button
         And I click "Go Home" button
         Then I should be redirected to the homepage
-        And the cart should be empty
+        And the cart count should be reset to 0

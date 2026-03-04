@@ -60,10 +60,8 @@ def failure_message_should_be_displayed_with_go_home_button(context):
 
 @then('I should be redirected to the homepage')
 def I_should_be_redirected_to_homepage(context):
-    expected_url = StartPage.URL
-    actual_url = context.driver.current_url
-    assert actual_url == expected_url, f"Expected to be redirected to '{expected_url}', but got '{actual_url}'"
-
+    context.page.assert_header(ProductPurchasingPage.EXPECTED_HEADER_TEXT)
+    
 @then('the cart should be empty')
 def the_cart_should_be_empty(context):
     context.page.assert_if_cart_is_empty()
@@ -91,6 +89,6 @@ def total_price_should_be(context, expected_total_price):
     actual_total_price = context.page.get_total_price()
     assert actual_total_price == expected_total_price, f"Expected total price '{expected_total_price}', but got '{actual_total_price}'"
 
-@then('the cart should be empty')
-def the_cart_should_be_empty(context):
-    context.page.assert_if_cart_is_empty()
+@then('the cart count should be reset to 0')
+def the_cart_count_should_be_reset_to_0(context):
+    context.page.assert_cart_icon_has_no_number()

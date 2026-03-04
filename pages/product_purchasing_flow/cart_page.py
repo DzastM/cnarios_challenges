@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from ..base_page import BasePage
+import pages.product_purchasing_flow.product_purchasing_page
 
 class CartPage(BasePage):
 
@@ -103,9 +104,9 @@ class CartPage(BasePage):
         success_message = self.driver.find_element(*self.ORDER_PLACED_SUCCESSFULLY_MESSAGE)
         assert success_message.is_displayed(), "Expected 'Order Placed Successfully!' message to be displayed, but it is not"
 
-    def click_go_home_button(self) -> ProductPurchasingPage:
+    def click_go_home_button(self):
         self.click_element(self.BACK_TO_HOME_BUTTON)
-        return ProductPurchasingPage(self.driver)
+        return pages.product_purchasing_flow.product_purchasing_page.ProductPurchasingPage(self.driver)
 
     def assert_go_home_button_is_displayed(self):
         go_home_button = self.driver.find_element(*self.BACK_TO_HOME_BUTTON)

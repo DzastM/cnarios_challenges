@@ -25,3 +25,7 @@ class BasePage:
 
     def get_data(self, key):
         return self.data_store.get(key, None)
+
+    def assert_header(self, expected_header):
+        actual_header = self.driver.find_element(*self.HEADER).text
+        assert actual_header == expected_header, f"Expected header to be '{expected_header}', but got '{actual_header}'"
