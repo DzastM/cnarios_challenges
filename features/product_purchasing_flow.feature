@@ -36,7 +36,7 @@ Feature: End-to-end Product Purchasing Flow
         And I view the cart
         And I decrease the quantity of "Laptop Backpack" to 0
         Then the cart should be empty
-        
+
 #to be implemented
     Scenario: Billing form validation
         Given I am on the product purchasing page
@@ -45,7 +45,7 @@ Feature: End-to-end Product Purchasing Flow
         | Bluetooth Speaker    | 1        |
         And I view the cart
         And I proceed to address
-        Then "Proceed to payment" button should be disabled
+        Then "Proceed to Payment" button should be disabled
 
     Scenario: Successful payment flow
         Given I am on the product purchasing page

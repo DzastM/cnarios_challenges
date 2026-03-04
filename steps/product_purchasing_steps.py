@@ -25,6 +25,14 @@ def I_increase_the_quantity_of_product(context, product_name, expected_quantity)
 def I_decrease_the_quantity_of_product(context, product_name, expected_quantity):
     context.page.update_product_quantity(product_name, int(expected_quantity))   
 
+@when('I proceed to address')
+def I_proceed_to_address(context):
+    context.page.click_proceed_to_address()
+
+@then('"Proceed to Payment" button should be disabled')
+def proceed_to_payment_button_should_be_disabled(context):
+    context.page.assert_proceed_to_payment_button_disabled()
+
 @then('the cart should contain')
 def the_cart_should_contain(context):
     expected_items_list = {}
@@ -41,5 +49,4 @@ def total_price_should_be(context, expected_total_price):
 
 @then('the cart should be empty')
 def the_cart_should_be_empty(context):
-    actual_items_list = context.page.get_item_name_and_quantity()
-    assert len(actual_items_list) == 0, f"Expected cart to be empty, but found items: {actual_items_list}"
+    context.page.assert_if_cart_is_empty()
