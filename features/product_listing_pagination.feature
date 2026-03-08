@@ -7,11 +7,11 @@ Feature: Product Listing Pagination
 
     Scenario: Find specific product and identify its page
         Given I am on the product listing page
-        When I search for product "Under Armour Running Shoes"
+        When I search for a product by name "Under Armour Running Shoes"
         Then I should find the product with correct data
             | Product Name               | Price  | Category | Stars |
             | Under Armour Running Shoes | $99.99 | Clothing | 5     |
-        And product was found on page <2>
+        And product was found on page 4
 
     Scenario: Find highest-rated product in each category
         Given I am on the product listing page
@@ -56,8 +56,8 @@ Feature: Product Listing Pagination
 
     Scenario: Validate pagination controls
         Given I am on the product listing page
-        When I click page <3>
-        Then products listed on page <3> should match given information
+        When I click page 3
+        Then products listed on page 3 should match given information
             | Product Name                        | Category    | Price   | Stars |
             | The North Face Jacket               | Clothing    | $129.99 | 5     |
             | Zero to One                         | Books       | $21.99  | 4     |

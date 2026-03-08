@@ -10,6 +10,23 @@ def I_am_on_the_product_listing_page(context):
 def I_count_the_number_of_products_in_each_category(context):
     context.page.count_products_in_each_category()
 
+@when('I search for a product by name "{product_name}"')
+def I_search_for_a_product_by_name(context, product_name):
+    context.page.search_product_by_name(product_name)
+
 @then('the product counts should match information from product data file')
 def the_product_counts_should_match_information_from_product_data_file(context):
     context.page.verify_product_counts()
+
+@then('I should find the product with correct data')
+def I_should_find_the_product_with_correct_data(context):
+    for row in context.table:
+        product_name = row['Product Name']
+        price = row['Price']
+        category = row['Category']
+        stars = row['Stars']
+        context.page.verify_product_data(product_name, price, category, stars)
+
+@then('product was found on page {page_number}')
+def product_was_found_on_page(context, page_number):
+    context.page.assert_page_number(int(page_number))
