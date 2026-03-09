@@ -17,37 +17,36 @@ Feature: Product Listing Pagination
         Given I am on the product listing page
         When I identify the highest-rated products in each category
         Then the highest-rated products should match information given in table
-            | Category    | Product Names                         |
-            | Books       | The Pragmatic Programmer              |
-            | Sports      | Wilson Pro Staff Tennis Racket        |
-            | Home        | Samsung Smart Refrigerator            |
-            | Home        | KitchenAid Stand Mixer                |
-            | Electronics | Sony PlayStation 5                    |
-            | Sports      | Callaway Golf Set                     |
-            | Clothing    | Nike Air Force 1 Sneakers             |
-            | Clothing    | Patagonia Fleece Sweater              |
-            | Sports      | Adidas Predator Football              |
-            | Books       | Sapiens: A Brief History of Humankind |
-            | Home        | Breville Barista Express              |
-            | Books       | Atomic Habits                         |
-            | Electronics | GoPro HERO11 Black                    |
-            | Clothing    | The North Face Jacket                 |
-            | Home        | Instant Pot Duo                       |
-            | Electronics | Bose QuietComfort 45                  |
-            | Electronics | Apple MacBook Air M2                  |
-            | Electronics | Apple iPhone 14 Pro                   |
-            | Clothing    | Under Armour Running Shoes            |
-            | Home        | Philips Air Fryer XXL                 |
-            | Electronics | Samsung Galaxy S23 Ultra              |
-            | Books       | Clean Code                            |
-            | Sports      | Nike Mercurial Football Boots         |
-            | Home        | Dyson V15 Detect Vacuum               |
+            | Product Name                          |
+            | The Pragmatic Programmer              |
+            | Wilson Pro Staff Tennis Racket        |
+            | Samsung Smart Refrigerator            |
+            | KitchenAid Stand Mixer                |
+            | Sony PlayStation 5                    |
+            | Callaway Golf Set                     |
+            | Nike Air Force 1 Sneakers             |
+            | Patagonia Fleece Sweater              |
+            | Adidas Predator Football              |
+            | Sapiens: A Brief History of Humankind |
+            | Breville Barista Express              |
+            | Atomic Habits                         |
+            | GoPro HERO11 Black                    |
+            | The North Face Jacket                 |
+            | Instant Pot Duo                       |
+            | Bose QuietComfort 45                  |
+            | Apple MacBook Air M2                  |
+            | Apple iPhone 14 Pro                   |
+            | Under Armour Running Shoes            |
+            | Philips Air Fryer XXL                 |
+            | Clean Code                            |
+            | Nike Mercurial Football Boots         |
+            | Dyson V15 Detect Vacuum               |
 
     Scenario: Find the most expensive product in each category
         Given I am on the product listing page
         When I identify the most expensive products in each category
         Then the most expensive products should match given information
-            | Category    | Product name               | Price    |
+            | Category    | Product Name               | Price    |
             | Books       | Clean Code                 | $34.99   |
             | Home        | Samsung Smart Refrigerator | $1799.99 |
             | Clothing    | The North Face Jacket      | $129.99  |
@@ -122,8 +121,8 @@ Feature: Product Listing Pagination
             | Nespresso Vertuo Coffee Maker | Home     | $179.99 | 4     |
             | Dyson V15 Detect Vacuum       | Home     | $699.99 | 5     |
 
-Scenario: Verify product card details format
-    Given I am on the product listing page
-    When I navigate through all product pages
-    Then each product card should display product name, price, category, and star rating in correct format
-    And rating stars are visible and not modifiable by user
+    Scenario: Verify product card details format
+        Given I am on the product listing page
+        When I navigate through all product pages
+        Then each product card should display product name, price, category, and star rating in correct format
+        And rating stars are visible and not modifiable by user

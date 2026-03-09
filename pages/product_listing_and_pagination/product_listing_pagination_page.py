@@ -53,24 +53,30 @@ class ProductListingPaginationPage(BasePage):
     def get_category_counts(self, category):
         return self.get_data(category)
 
-    def verify_product_counts(self):
+    def reset_category_counts(self):
+        self.CATEGORIES = dict.fromkeys(self.CATEGORIES, 0)  # Reset any stored values
+
+    def verify_product_counts(self):        
         categories_counts = self.driver.find_elements(By.XPATH, self.CATEGORIES_LISTED)
         for category in categories_counts:
             category_name = category.find_element(By.XPATH, self.CATEGORIES_NAMES).text.capitalize()  # Extract category name and capitalize to match keys in self.CATEGORIES
             expected_count = int(category.find_element(By.XPATH, self.CATEGORIES_COUNTS).text.strip('()'))            
             actual_count = self.get_category_counts(category_name)
             assert expected_count == actual_count, f"Expected {expected_count} products in category '{category_name}', but found {actual_count}."
-    
+        self.reset_category_counts()  # Reset counts after verification
+
     def search_product_by_name(self, product_name):
-        while self.driver.find_element(By.XPATH, self.NEXT_BUTTON).get_attribute("disabled") is None:  # While the "Next" button is enabled
+        while True:
             products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
             for product in products:
                 current_product_name = product.find_element(By.XPATH, self.PRODUCT_NAME).text
                 if current_product_name.lower() == product_name.lower():
                     return product  # Return the WebElement of the found product
-            self.click_next_page()
+            if self.driver.find_element(By.XPATH, self.NEXT_BUTTON).get_attribute("disabled") is None:  # While the "Next" button is enabled
+                self.click_next_page()
+            else:
+                break
         raise Exception(f"Product with name '{product_name}' not found.")
-
     
     def verify_product_data(self, product_name, price, category, stars):
         product = self.search_product_by_name(product_name)
@@ -89,3 +95,49 @@ class ProductListingPaginationPage(BasePage):
     def assert_page_number(self, expected_page_number):
         current_page = self.get_current_page_number()
         assert current_page == expected_page_number, f"Expected to be on page {expected_page_number}, but currently is on page {current_page}."
+
+    def find_products_by_rating(self, expected_rank):
+        while True:
+            products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
+            for product in products:
+                current_rating = product.find_element(By.XPATH, self.PRODUCT_RATING).get_attribute("aria-label").split()[0]  # Get the number of stars from 'aria-label' attribute
+                if int(current_rating) == expected_rank:
+                    product_name = product.find_element(By.XPATH, self.PRODUCT_NAME).text
+                    product_category = product.find_element(By.XPATH, self.PRODUCT_CATEGORY).text.rsplit(' ', 1)[-1]  # Extract category from text like "Category: Books"
+                    self.store_data(product_name, product_category)
+            if self.driver.find_element(By.XPATH, self.NEXT_BUTTON).get_attribute("disabled") is None:  # While the "Next" button is enabled
+                self.click_next_page()
+            else:
+                break
+    
+    def assert_product_has_rating(self, product_name, rating):
+        assert(product_name in self.data_store), f"Expected to find product '{product_name}' with rating {rating}, but it was not found."
+
+    def find_most_expensive_products_in_each_category(self):
+        most_expensive_products = {
+            "Books": {"name": None, "price": "0"},
+            "Electronics": {"name": None, "price": "0"},
+            "Home": {"name": None, "price": "0"},
+            "Clothing": {"name": None, "price": "0"},
+            "Sports": {"name": None, "price": "0"}
+        }
+        while True:
+            products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
+            for product in products:
+                product_price = product.find_element(By.XPATH, self.PRODUCT_PRICE).text
+                product_category = product.find_element(By.XPATH, self.PRODUCT_CATEGORY).text.rsplit(' ', 1)[-1]
+                current_highest_price = most_expensive_products[product_category]['price']
+                if float(product_price.strip('$')) > float(current_highest_price.strip('$')):
+                    product_name = product.find_element(By.XPATH, self.PRODUCT_NAME).text
+                    most_expensive_products[product_category]['name'] = product_name
+                    most_expensive_products[product_category]['price'] = product_price
+            if self.driver.find_element(By.XPATH, self.NEXT_BUTTON).get_attribute("disabled") is None:  # While the "Next" button is enabled
+                self.click_next_page()
+            else:
+                break
+        self.store_data("most_expensive_products", most_expensive_products)
+
+    def assert_most_expensive_product(self, category, product_name):
+        most_expensive_products = self.get_data("most_expensive_products")
+        expected_product_name = most_expensive_products[category]["name"]
+        assert expected_product_name == product_name, f"Expected most expensive product in category '{category}' to be '{product_name}', but found '{expected_product_name}'."
