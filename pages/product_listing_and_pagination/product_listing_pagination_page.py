@@ -112,3 +112,32 @@ class ProductListingPaginationPage(BasePage):
     
     def assert_product_has_rating(self, product_name, rating):
         assert(product_name in self.data_store), f"Expected to find product '{product_name}' with rating {rating}, but it was not found."
+
+    def find_most_expensive_products_in_each_category(self):
+        most_expensive_products = {
+            "Books": {"name": None, "price": "0"},
+            "Electronics": {"name": None, "price": "0"},
+            "Home": {"name": None, "price": "0"},
+            "Clothing": {"name": None, "price": "0"},
+            "Sports": {"name": None, "price": "0"}
+        }
+        while True:
+            products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
+            for product in products:
+                product_price = product.find_element(By.XPATH, self.PRODUCT_PRICE).text
+                product_category = product.find_element(By.XPATH, self.PRODUCT_CATEGORY).text.rsplit(' ', 1)[-1]
+                current_highest_price = most_expensive_products[product_category]['price']
+                if float(product_price.strip('$')) > float(current_highest_price.strip('$')):
+                    product_name = product.find_element(By.XPATH, self.PRODUCT_NAME).text
+                    most_expensive_products[product_category]['name'] = product_name
+                    most_expensive_products[product_category]['price'] = product_price
+            if self.driver.find_element(By.XPATH, self.NEXT_BUTTON).get_attribute("disabled") is None:  # While the "Next" button is enabled
+                self.click_next_page()
+            else:
+                break
+        self.store_data("most_expensive_products", most_expensive_products)
+
+    def assert_most_expensive_product(self, category, product_name):
+        most_expensive_products = self.get_data("most_expensive_products")
+        expected_product_name = most_expensive_products[category]["name"]
+        assert expected_product_name == product_name, f"Expected most expensive product in category '{category}' to be '{product_name}', but found '{expected_product_name}'."

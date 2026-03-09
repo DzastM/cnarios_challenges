@@ -46,7 +46,7 @@ Feature: Product Listing Pagination
         Given I am on the product listing page
         When I identify the most expensive products in each category
         Then the most expensive products should match given information
-            | Category    | Product name               | Price    |
+            | Category    | Product Name               | Price    |
             | Books       | Clean Code                 | $34.99   |
             | Home        | Samsung Smart Refrigerator | $1799.99 |
             | Clothing    | The North Face Jacket      | $129.99  |
