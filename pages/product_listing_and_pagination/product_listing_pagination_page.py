@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from ..base_page import BasePage
+import random
 
 class ProductListingPaginationPage(BasePage):
 
@@ -37,6 +38,11 @@ class ProductListingPaginationPage(BasePage):
         previous_button = self.driver.find_element(By.XPATH, self.PREVIOUS_BUTTON)
         if previous_button.is_enabled():
             previous_button.click()
+
+    def click_page(self, page_number):
+        page_button = self.driver.find_element(By.XPATH, f"//button[@aria-label='Go to page {page_number}']")
+        if page_button.is_enabled():
+            page_button.click()
 
     def count_products_in_category(self, category):
         products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
@@ -141,3 +147,34 @@ class ProductListingPaginationPage(BasePage):
         most_expensive_products = self.get_data("most_expensive_products")
         expected_product_name = most_expensive_products[category]["name"]
         assert expected_product_name == product_name, f"Expected most expensive product in category '{category}' to be '{product_name}', but found '{expected_product_name}'."
+
+    def navigate_to_page(self, page_number):
+        while True:
+            current_page = self.get_current_page_number()
+            if current_page < page_number:
+                if self.driver.find_element(By.XPATH, self.PAGINATION_RIGHT_ARROW).get_attribute("disabled") is None:  # While the right arrow is enabled
+                    self.click_next_page()
+                else:
+                    break
+            elif current_page > page_number:
+                if self.driver.find_element(By.XPATH, self.PAGINATION_LEFT_ARROW).get_attribute("disabled") is None:  # While the left arrow is enabled
+                    self.click_previous_page()
+                else:
+                    break
+            else:
+                break
+    
+    def get_total_pages(self):
+        last_page = self.driver.find_element(By.CSS_SELECTOR, "nav ul li:nth-last-child(2) button").get_attribute("aria-label").split()[-1]
+        return int(last_page)
+
+    def verify_product_card_format(self):
+        products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
+        for product in products:
+            assert product.find_element(By.XPATH, self.PRODUCT_NAME).is_displayed(), "Product name is not displayed on the product card."
+            assert product.find_element(By.XPATH, self.PRODUCT_PRICE).is_displayed(), "Product price is not displayed on the product card."
+            assert product.find_element(By.XPATH, self.PRODUCT_CATEGORY).is_displayed(), "Product category is not displayed on the product card."
+            assert product.find_element(By.XPATH, self.PRODUCT_RATING).is_displayed(), "Product star rating is not displayed on the product card."
+    
+    def verify_rating_stars(self):
+        assert self.driver.find_elements(By.XPATH, f"({self.PRODUCT_RATING})[{random.randint(1,10)}]"), "Rating stars are not visible on the product cards."

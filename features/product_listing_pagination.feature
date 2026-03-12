@@ -69,7 +69,7 @@ Feature: Product Listing Pagination
             | Bose QuietComfort 45                | Electronics | $299.99 | 5     |
             | Uniqlo Ultra Light Down Jacket      | Clothing    | $59.99  | 4     |
         When I click "Next" button
-        Then products listed on page <4> should match given information
+        Then products listed on page 4 should match given information
             | Product Name               | Category    | Price    | Stars |
             | Spalding NBA Basketball    | Sports      | $29.99   | 4     |
             | Apple MacBook Air M2       | Electronics | $1099.99 | 5     |
@@ -82,7 +82,7 @@ Feature: Product Listing Pagination
             | Yonex Badminton Racket     | Sports      | $59.99   | 4     |
             | Sony WH-1000XM5 Headphones | Electronics | $399.99  | 5     |
         When I click "Previous" button
-        Then products listed on page <3> should match given information
+        Then products listed on page 3 should match given information
             | Product Name                        | Category    | Price   | Stars |
             | The North Face Jacket               | Clothing    | $129.99 | 5     |
             | Zero to One                         | Books       | $21.99  | 4     |
@@ -95,7 +95,7 @@ Feature: Product Listing Pagination
             | Bose QuietComfort 45                | Electronics | $299.99 | 5     |
             | Uniqlo Ultra Light Down Jacket      | Clothing    | $59.99  | 4     |
         When I navigate to first page using pagination
-        Then products listed on page <1> should match given information
+        Then products listed on page 1 should match given information
             | Product Name                   | Category    | Price    | Stars |
             | The Pragmatic Programmer       | Books       | $29.99   | 5     |
             | Wilson Pro Staff Tennis Racket | Sports      | $249.99  | 5     |
@@ -108,7 +108,7 @@ Feature: Product Listing Pagination
             | Callaway Golf Set              | Sports      | $499.99  | 5     |
             | Dell XPS 13 Laptop             | Electronics | $1199.99 | 4     |
         When I navigate to last page using pagination
-        Then products listed on page <5> should match given information
+        Then products listed on page 5 should match given information
             | Product Name                  | Category | Price   | Stars |
             | The Lean Startup              | Books    | $19.99  | 4     |
             | Adidas Originals Hoodie       | Clothing | $74.99  | 4     |
