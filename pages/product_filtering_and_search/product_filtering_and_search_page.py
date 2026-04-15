@@ -13,6 +13,8 @@ class ProductFilteringAndSearchPage(BasePage):
     PRODUCT_NAME = ".//p[1]"
     PRODUCT_CATEGORY_AND_PRICE = ".//p[2]"
     PRODUCT_STOCK_STATUS = ".//span"
+    PRICE_RANGE_MIN = (By.XPATH, "//p[contains(text(),'Price Range (₹)')]/..//input[@data-index='0']")
+    PRICE_RANGE_MAX = (By.XPATH, "//p[contains(text(),'Price Range (₹)')]/..//input[@data-index='1']")
 
     def filter_by_category(self, category):
         dropdown = self.driver.find_element(*self.CATEGORY_FILTER_DROPDOWN)
@@ -26,12 +28,24 @@ class ProductFilteringAndSearchPage(BasePage):
             product_category = product.find_element(By.XPATH, self.PRODUCT_CATEGORY_AND_PRICE).text.split()[0]
             assert product_category == expected_category, f"Expected category '{expected_category}', but found '{product_category}'"
 
+    def set_price_minimum(self, min_price):
+        min_price_input = self.driver.find_element(*self.PRICE_RANGE_MIN)
+        min_price_input.clear()
+        min_price_input.send_keys(str(min_price))
 
+    def set_price_maximum(self, max_price):
+        max_price_input = self.driver.find_element(*self.PRICE_RANGE_MAX)
+        max_price_input.clear()
+        max_price_input.send_keys(str(max_price))
 
-
-
-
-
+    def verify_product_price_range(self, min_price, max_price):
+        products = self.driver.find_elements(By.XPATH, self.PRODUCTS)
+        min_price = float(min_price.replace("₹", "").replace(",", ""))
+        max_price = float(max_price.replace("₹", "").replace(",", ""))
+        for product in products:
+            product_price = product.find_element(By.XPATH, self.PRODUCT_CATEGORY_AND_PRICE).text.split()[2]  # Assuming the price is the third element in the text including '*' symbol:  "<category> * <price> * <star symbol> * <number of stars>"
+            product_price = float(product_price.replace("₹", "").replace(",", ""))
+            assert min_price <= product_price <= max_price, f"Expected price between '{min_price}' and '{max_price}', but found '{product_price}'"
 
 
 

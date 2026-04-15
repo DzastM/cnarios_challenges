@@ -1,21 +1,21 @@
 Feature: Product Filtering & Search
 
-#high priority 
+#high priority #done
     Scenario: Filter products by category
         Given I am on the product filtering page
         When I filter products by category "Electronics"
         Then only products from "Electronics" category should be displayed
 
-#high priority 
+#high priority # done
     Scenario: Filter products by price range
         Given I am on the product filtering page
-        When I filter products with price range "₹5000 - ₹50000"
-        Then only products priced between ₹5000 and ₹50000 should be displayed
+        When I filter products with price range "₹5000" to "₹50000"
+        Then only products priced between "₹5000" and "₹50000" should be displayed
 
     Scenario: Filter products by minimum rating
         Given I am on the product filtering page
-        When I filter products with minimum rating of 4 stars
-        Then only products with 4 stars or higher should be displayed
+        When I filter products with minimum rating of "4" stars
+        Then only products with "4" stars or higher should be displayed
 
     Scenario: Show only in-stock products
         Given I am on the product filtering page
